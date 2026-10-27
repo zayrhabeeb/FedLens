@@ -7,6 +7,10 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: development
+    ignore:
+      # Must match the version @huggingface/transformers depends on (WASM glue and
+      # binary are versioned together); bump only alongside transformers.
+      - dependency-name: onnxruntime-web
   - package-ecosystem: github-actions
     directory: /
     schedule:
