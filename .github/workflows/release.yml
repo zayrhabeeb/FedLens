@@ -1,0 +1,35 @@
+# Push a tag like v1.0.0 → build both browser targets → attach zips to a GitHub Release.
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - name: Check tag matches package.json version
+        run: |
+          PKG="v$(node -p "require('./package.json').version")"
+          if [ "$PKG" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $PKG" >&2
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm run zip
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" release/*.zip --title "FedLens $GITHUB_REF_NAME" --generate-notes

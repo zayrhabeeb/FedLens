@@ -1,0 +1,51 @@
+# Fetches public macro data + RSS headlines and commits static JSON snapshots
+# to /data. The extension reads them from raw.githubusercontent.com, so users
+# never need an API key and upstream free tiers see ~4 requests/day in total.
+#
+# Optional repo secrets (Settings → Secrets and variables → Actions):
+#   FRED_API_KEY  — official FRED API instead of the keyless fredgraph.csv
+#   BEA_API_KEY   — adds quarterly US real GDP growth
+#   BLS_API_KEY   — BLS API v2 (20 years of history instead of 3)
+# Every source works without them.
+name: Refresh data snapshots
+
+on:
+  schedule:
+    - cron: '17 */6 * * *' # every 6 hours, off the top of the hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Fetch snapshots
+        run: npm run data:refresh
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          BEA_API_KEY: ${{ secrets.BEA_API_KEY }}
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "data: refresh snapshots $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

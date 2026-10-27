@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest an idea, data source or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      description: FedLens stays free and keyless for users.
+      options:
+        - label: This works without a paid API, a backend server, or a user-facing API key
+          required: true

@@ -1,0 +1,47 @@
+name: Bug report
+description: Something in FedLens is broken or wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please never paste API keys or personal data here.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the side panel
+        2. Select Japan → Forecast
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      options: [Dashboard, News Radar / Analyzer, Events, Documents, Forecast Lab, Compare, Brief, Settings, Data snapshots / workflow]
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 141 / Firefox 144
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: FedLens version
+      description: Shown in Settings → About
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console errors (optional)
+      description: Right-click the panel → Inspect → Console
+      render: text
