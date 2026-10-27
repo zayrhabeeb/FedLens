@@ -28,7 +28,7 @@
     "@fontsource/inter": "^5.3.0",
     "@huggingface/transformers": "^4.3.1",
     "lucide-react": "^1.61.0",
-    "onnxruntime-web": "1.31.0-dev.20260914-8d85527a0",
+    "onnxruntime-web": "1.31.0-dev.20260918-bc8e7ed75",
     "pdfjs-dist": "^6.4.299",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
