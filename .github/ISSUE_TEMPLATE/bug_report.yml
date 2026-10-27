@@ -26,7 +26,18 @@ body:
     id: module
     attributes:
       label: Module
-      options: [Dashboard, News Radar / Analyzer, Events, Documents, Forecast Lab, Compare, Brief, Settings, Data snapshots / workflow]
+      options:
+        [
+          Dashboard,
+          News Radar / Analyzer,
+          Events,
+          Documents,
+          Forecast Lab,
+          Compare,
+          Brief,
+          Settings,
+          Data snapshots / workflow,
+        ]
   - type: input
     id: browser
     attributes:

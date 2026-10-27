@@ -20,7 +20,7 @@ Removing the extension deletes all of it.
 - Public data snapshots from `raw.githubusercontent.com` (this project's repository).
 - Public RSS feeds from central banks and Google News.
 - Only if you enable them: model weights from `huggingface.co` (local model), or requests to the model endpoint **you** configure, containing the extracted facts being rephrased.
-- Only when you click *Analyze current tab*: the text of that tab is read locally; it is not uploaded.
+- Only when you click _Analyze current tab_: the text of that tab is read locally; it is not uploaded.
 
 These third parties receive standard request metadata (such as your IP address) under their own privacy policies. FedLens sends no identifiers or cookies (`credentials: 'omit'`).
 
