@@ -13,6 +13,7 @@
   --ink: #152232;
   --muted: #5b6b7f;
   --line: #dde3ea;
+  --brand: #023631;
   --accent: #a8861c;
   --accent-soft: #f6efd6;
   --up: #15803d;
@@ -30,6 +31,7 @@
     --ink: #e8edf3;
     --muted: #93a3b8;
     --line: #2a3d55;
+    --brand: #e6efe2;
     --accent: #d8b84a;
     --accent-soft: #2e2a17;
     --up: #4ade80;
@@ -49,6 +51,7 @@
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-brand: var(--brand);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-up: var(--up);

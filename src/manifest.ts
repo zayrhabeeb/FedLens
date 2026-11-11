@@ -25,6 +25,8 @@ export function buildManifest(target: BrowserTarget, version: string): Record<st
     manifest_version: 3,
     name: 'FedLens',
     short_name: 'FedLens',
+    author: 'Zayr Habeeb',
+    homepage_url: 'https://github.com/zayrhabeeb/FedLens',
     version,
     description:
       'Global macro intelligence: indicators, news radar, events, policy forecasts and comparisons for 12 economies. Free and keyless.',

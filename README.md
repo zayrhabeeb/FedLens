@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/logo.png" alt="FedLens" width="520"></p>
+
 # FedLens
 
 **Global macroeconomic intelligence in your browser.** Live indicators, a news radar with real NLP, event extraction, a calibrated policy forecast lab and side-by-side country comparisons for 12 economies — as a Manifest V3 extension for Chrome and Firefox.
@@ -102,8 +104,8 @@ Keys, when used, live only in **GitHub repository secrets** for the scheduled wo
 
 ### From a GitHub Release (recommended)
 
-1. Download `fedlens-chrome-vX.Y.Z.zip` (Chrome, Edge, Brave, Arc) or `fedlens-firefox-vX.Y.Z.zip` from the [latest release](https://github.com/zayrhabeeb/FedLens/releases/latest) and unzip it.
-2. **Chrome / Edge / Brave:** open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, and select the unzipped folder.
+1. Download `fedlens-chrome-vX.Y.Z.zip` (Chrome, Brave, Arc), `fedlens-edge-vX.Y.Z.zip` (Microsoft Edge) or `fedlens-firefox-vX.Y.Z.zip` from the [latest release](https://github.com/zayrhabeeb/FedLens/releases/latest) and unzip it.
+2. **Chrome / Edge / Brave:** open `chrome://extensions` (Edge: `edge://extensions`, toggle **Developer mode** in the left sidebar), enable **Developer mode**, click **Load unpacked**, and select the unzipped folder.
 3. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → select `manifest.json` in the unzipped folder. (For a permanent install, use the signed build from addons.mozilla.org once published.) On first run, open **Settings → Grant feed access** — Firefox asks for host access separately.
 4. Click the FedLens toolbar icon to open the side panel (sidebar in Firefox).
 
@@ -184,7 +186,7 @@ The Forecast Lab always shows its own out-of-sample record. With the snapshot of
 
 ## Roadmap
 
-- [ ] Publish to addons.mozilla.org (free) and optionally the Chrome Web Store (one-time $5 developer fee)
+- [ ] Publish to Microsoft Edge Add-ons (free; listing kit in [`store/edge/`](store/edge/LISTING.md)) and addons.mozilla.org (free); optionally the Chrome Web Store (one-time $5 developer fee)
 - [ ] Demo GIF and short architecture walkthrough
 - [ ] "Everyday" plain-language view mode
 - [ ] Per-country forecast calibration and meeting-calendar-aware horizons
@@ -199,4 +201,4 @@ Issues and PRs are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [C
 
 ## License
 
-[MIT](LICENSE) © 2026 Zayr. Data and third-party components remain under their own terms — see [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+[MIT](LICENSE) © 2026 Zayr Habeeb. Data and third-party components remain under their own terms — see [ATTRIBUTIONS.md](ATTRIBUTIONS.md).

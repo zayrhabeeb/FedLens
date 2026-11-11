@@ -15,6 +15,7 @@ import {
 import { COUNTRIES, getCountry } from '../shared/countries';
 import { DISCLAIMER } from '../shared/disclaimer';
 import type { CountryCode } from '../shared/types';
+import { LogoMark } from './components/Logo';
 import { Button, Spinner } from './components/primitives';
 import { relativeTime } from './lib/format';
 import { useAppData } from './state/AppData';
@@ -92,7 +93,9 @@ function DisclaimerGate() {
   const { updateSettings } = useAppData();
   return (
     <div className="flex h-full flex-col justify-center gap-4 p-6">
-      <h1 className="font-display text-3xl font-semibold">FedLens</h1>
+      <h1 className="flex items-center gap-3 text-2xl font-semibold tracking-wide text-brand">
+        <LogoMark className="size-9" /> FEDLENS
+      </h1>
       <p className="text-muted">
         Global macro intelligence for 12 economies — free, keyless and deterministic-first.
       </p>
@@ -117,7 +120,9 @@ export function App() {
     <div className="flex h-full flex-col">
       <header className="no-print flex items-center justify-between gap-2 border-b border-line bg-surface px-3 py-2">
         <div className="flex items-baseline gap-2">
-          <span className="font-display text-xl font-semibold">FedLens</span>
+          <span className="flex items-center gap-1.5 text-[15px] font-semibold tracking-wide text-brand">
+            <LogoMark className="size-5" /> FEDLENS
+          </span>
           <span className="text-[11px] text-muted">
             {getCountry(data.settings.country).centralBankShort}
           </span>

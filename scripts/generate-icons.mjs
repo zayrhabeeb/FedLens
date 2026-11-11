@@ -1,23 +1,33 @@
 /**
  * Generates the extension icons (PNG) using only Node built-ins, so the repo
- * contains no third-party or licensed artwork.
- * Design: navy tile, gold lens ring with a handle, gold corner brackets.
+ * needs no binary artwork sources.
+ * Design: the FedLens mark — an asterisk with a corner bracket — in deep teal
+ * on a cream rounded tile. Geometry is shared with src/ui/components/Logo.tsx.
  *
  * Usage: npm run icons
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
-const NAVY = [21, 34, 50];
-const GOLD = [201, 162, 39];
+const CREAM = [255, 255, 242];
+const TEAL = [2, 54, 49];
 const SIZES = [16, 32, 48, 128];
 const SUPERSAMPLE = 4;
 
+/** Mark strokes in a 250×250 box: [x1, y1, x2, y2, width] with butt caps. */
+const STROKES = [
+  [109.5, 35, 109.5, 247, 23], // vertical
+  [0, 141, 219, 141, 26], // horizontal
+  [34.5, 66, 185.5, 216, 24], // diagonal ↘
+  [28, 219, 109.5, 141, 24], // half diagonal ↙ (upper half replaced by the bracket)
+  [133, 15.5, 250, 15.5, 25], // bracket top
+  [237.5, 3, 237.5, 113, 25], // bracket side
+];
+
 function crc32(buf) {
-  let c;
   let crc = 0xffffffff;
   for (let n = 0; n < buf.length; n++) {
-    c = (crc ^ buf[n]) & 0xff;
+    let c = (crc ^ buf[n]) & 0xff;
     for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
     crc = (crc >>> 8) ^ c;
   }
@@ -52,42 +62,31 @@ function encodePng(size, rgba) {
   ]);
 }
 
-/** Colour of a point in unit coordinates (0..1), or null for transparent. */
+/** True if (x, y) lies on a thick segment with butt (square-cut) ends. */
+function onStroke(x, y, [x1, y1, x2, y2, w]) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const t = ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy);
+  if (t < 0 || t > 1) return false;
+  const px = x1 + t * dx - x;
+  const py = y1 + t * dy - y;
+  return px * px + py * py <= (w / 2) ** 2;
+}
+
+/** Colour at unit coordinates (0..1), or null for transparent. */
 function shade(x, y, size) {
-  const r = 0.18; // tile corner radius
+  const r = 0.2; // tile corner radius
   const dx = Math.max(r - x, 0, x - (1 - r));
   const dy = Math.max(r - y, 0, y - (1 - r));
   if (dx * dx + dy * dy > r * r) return null;
-
-  const stroke = Math.max(0.07, 1.6 / size);
-  // Lens ring
-  const cx = 0.45;
-  const cy = 0.45;
-  const d = Math.hypot(x - cx, y - cy);
-  if (Math.abs(d - 0.22) < stroke / 2) return GOLD;
-  // Handle (diagonal bar from ring edge to lower right)
-  const t = (x - cx + (y - cy)) / 2;
-  const off = Math.abs(x - cx - (y - cy)) / Math.SQRT2;
-  if (t > 0.17 && t < 0.31 && off < stroke * 0.7) return GOLD;
-  // Corner brackets (omitted at 16px where they would be noise)
-  if (size >= 32) {
-    const m = 0.12;
-    const len = 0.16;
-    const near = (v, edge) => Math.abs(v - edge) < stroke / 2;
-    for (const [ex, ey] of [
-      [m, m],
-      [1 - m, m],
-      [m, 1 - m],
-      [1 - m, 1 - m],
-    ]) {
-      const sx = ex < 0.5 ? 1 : -1;
-      const sy = ey < 0.5 ? 1 : -1;
-      const alongX = (x - ex) * sx >= 0 && (x - ex) * sx <= len;
-      const alongY = (y - ey) * sy >= 0 && (y - ey) * sy <= len;
-      if ((near(y, ey) && alongX) || (near(x, ex) && alongY)) return GOLD;
-    }
-  }
-  return NAVY;
+  // Small icons get less padding and bolder strokes so the mark stays legible.
+  const pad = size <= 32 ? 0.12 : 0.18;
+  const boost = size <= 16 ? 1.5 : size <= 32 ? 1.2 : 1;
+  const mx = ((x - pad) / (1 - 2 * pad)) * 250;
+  const my = ((y - pad) / (1 - 2 * pad)) * 250;
+  return STROKES.some(([x1, y1, x2, y2, w]) => onStroke(mx, my, [x1, y1, x2, y2, w * boost]))
+    ? TEAL
+    : CREAM;
 }
 
 function render(size) {
@@ -95,10 +94,10 @@ function render(size) {
   const n = SUPERSAMPLE;
   for (let py = 0; py < size; py++) {
     for (let px = 0; px < size; px++) {
-      let rSum = 0,
-        gSum = 0,
-        bSum = 0,
-        aSum = 0;
+      let rSum = 0;
+      let gSum = 0;
+      let bSum = 0;
+      let aSum = 0;
       for (let sy = 0; sy < n; sy++) {
         for (let sx = 0; sx < n; sx++) {
           const c = shade((px + (sx + 0.5) / n) / size, (py + (sy + 0.5) / n) / size, size);
@@ -126,3 +125,8 @@ for (const size of SIZES) {
   writeFileSync(`public/icons/icon-${size}.png`, encodePng(size, render(size)));
   console.log(`public/icons/icon-${size}.png`);
 }
+
+// 300×300 logo required by the Microsoft Edge Add-ons store listing.
+mkdirSync('store/edge', { recursive: true });
+writeFileSync('store/edge/logo-300.png', encodePng(300, render(300)));
+console.log('store/edge/logo-300.png');

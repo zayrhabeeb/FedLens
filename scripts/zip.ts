@@ -9,7 +9,12 @@ import { join, relative } from 'node:path';
 import { zipSync, type Zippable } from 'fflate';
 
 const { version } = JSON.parse(readFileSync('package.json', 'utf8')) as { version: string };
-const TARGETS = ['chrome', 'firefox'] as const;
+/** Edge installs the Chromium build as-is; it gets its own zip name for the Edge Add-ons store. */
+const TARGETS = [
+  { name: 'chrome', dir: 'chrome' },
+  { name: 'edge', dir: 'chrome' },
+  { name: 'firefox', dir: 'firefox' },
+] as const;
 
 function collect(dir: string, root: string, out: Zippable): Zippable {
   for (const name of readdirSync(dir)) {
@@ -23,12 +28,12 @@ function collect(dir: string, root: string, out: Zippable): Zippable {
 
 mkdirSync('release', { recursive: true });
 for (const target of TARGETS) {
-  const dir = join('dist', target);
+  const dir = join('dist', target.dir);
   if (!existsSync(join(dir, 'manifest.json'))) {
     console.error(`Missing ${dir}/manifest.json — run "npm run build" first.`);
     process.exit(1);
   }
-  const file = join('release', `fedlens-${target}-v${version}.zip`);
+  const file = join('release', `fedlens-${target.name}-v${version}.zip`);
   writeFileSync(file, zipSync(collect(dir, dir, {}), { level: 9 }));
   console.log(`${file} (${(statSync(file).size / 1e6).toFixed(1)} MB)`);
 }

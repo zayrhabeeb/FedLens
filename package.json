@@ -1,10 +1,10 @@
 {
   "name": "fedlens",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Global macroeconomic intelligence in your browser: live indicators, news radar, event extraction, policy forecasts and country comparisons for 12 economies. Free, keyless, deterministic-first.",
   "license": "MIT",
-  "author": "Zayr",
+  "author": "Zayr Habeeb",
   "type": "module",
   "engines": {
     "node": ">=22"
