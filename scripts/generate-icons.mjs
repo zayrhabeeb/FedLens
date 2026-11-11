@@ -125,8 +125,3 @@ for (const size of SIZES) {
   writeFileSync(`public/icons/icon-${size}.png`, encodePng(size, render(size)));
   console.log(`public/icons/icon-${size}.png`);
 }
-
-// 300×300 logo required by the Microsoft Edge Add-ons store listing.
-mkdirSync('store/edge', { recursive: true });
-writeFileSync('store/edge/logo-300.png', encodePng(300, render(300)));
-console.log('store/edge/logo-300.png');
